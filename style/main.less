@@ -1,0 +1,177 @@
+@charset "utf-8";
+
+body{background-color: #f2f2f2;}
+ul,li{margin:0; padding: 0;}
+div{width: 100px;height: 100px;}
+/* 我的被编译的注释 */
+//不会被编译的注释
+
+//less中的变量  @变量名：值；
+@test_width:300px;
+.box{
+    width:@test_width; 
+    height:@test_width; 
+    background-color: yellow;
+    .border;
+}
+
+//混合
+.border{
+    border:solid 5px pink;
+}
+.box2{
+    .box;
+    margin-left: 20px;
+}
+
+//混合-可带参数的
+.border_02(@border_width){
+    border: solid blue @border_width;
+}
+.test_hunhe{
+    .border_02(30px);
+}
+
+//混合-默认带值
+.border_03(@border_width:10px){
+    border: solid green @border_width;
+}
+.test_hunhe_03{
+    .border_03();
+}
+.test_hunhe_3{
+    .border_03(20px);
+}
+//e.g.
+.border_radius(@radius:5px){
+    -webkit-border-radius:@radius;
+    -moz-border-radius:@radius;
+    border-radius:@radius;
+}
+.radius_test{
+    width: 100px;
+    height: 100px;
+    background-color: green;
+    .border_radius(10px);
+}
+
+//三角形
+.anjiao{
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    border-width: 10px;
+    border-color: transparent transparent red transparent;
+    border-style: dashed dashed solid dashed;
+}
+//匹配模式
+.triangle(top,@w:5px,@c:#ccc){
+    border-width: @w;
+    border-color: transparent transparent @c transparent;
+    border-style: dashed dashed solid dashed;
+}
+.triangle(bottom,@w:5px,@c:#ccc){
+    border-width: @w;
+    border-color: @c transparent transparent transparent;
+    border-style: solid dashed dashed dashed;
+}
+.triangle(left,@w:5px,@c:#ccc){
+    border-width: @w;
+    border-color: transparent @c transparent transparent;
+    border-style: dashed solid dashed dashed;
+}
+.triangle(right,@w:5px,@c:#ccc){
+    border-width: @w;
+    border-color: transparent transparent transparent @c;
+    border-style: dashed dashed dashed solid;
+}
+.triangle(@_,@w:5px,@c:#ccc){
+    width:0;
+    height: 0;
+    overflow:hidden;
+}
+.sanjiao_01{
+    .triangle(top, 100px);
+}
+.sanjiao_02{
+    .triangle(bottom, 100px, blue);
+}
+.sanjiao_03{
+    .triangle(left, 100px);
+}
+.sanjiao_04{
+    .triangle(right, 100px);
+}
+
+//匹配模式-定位
+.pos(r){
+    position: relative;
+}
+.pos(a){
+    position: absolute;
+}
+.pos(f){
+    position: fixed;
+}
+.pipei{
+    width: 200px;
+    height: 200px;
+    background-color: blue;
+    .pos(r);
+}
+
+//运算
+@test_01:300px;
+.box_02{
+    width:(@test_01 - 200) * 5;
+    color:#ccc - 10;
+}
+
+//嵌套规则
+.list{
+    width: 600px;
+    margin: 30px auto; 
+    padding:0;
+    list-style: none;
+    li{
+        height:30px;
+        line-height: 30px;
+        background-color: pink;
+        margin-bottom: 5px;
+        padding:0 10px;
+    }
+    &_li{
+        width: 400px;
+    }
+    a{
+        float: left;
+        //&代表他的上一层选择器  (注：在这里如果放在a外，他的上一层就是.list而不是li)
+        &:hover{
+            color:red;
+        }
+    }
+    span{
+        float: right;
+    }
+}
+
+//arguments变量
+.border_arg(@w:30px, @c:red, @xx:solid){
+    border: @arguments;
+}
+.test_arguments{
+    .border_arg();
+}
+.test_arguments_01{
+    .border_arg(40px);
+}
+
+//避免编译
+.test_03{
+    width:~'calc(300px-30px)'; //不要less计算，让浏览器计算
+}
+
+//important
+.test_important{
+    .border_radius() !important;
+}
